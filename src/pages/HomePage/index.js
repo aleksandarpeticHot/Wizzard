@@ -1,13 +1,13 @@
 import React from 'react'
-import Wizard from '../../components/Wizard'
+import Wizzard from '../../components/Wizzard'
 import StepOne from './WizardStepsComponents/StepOne'
 import StepTwo from './WizardStepsComponents/StepTwo'
 
 const HomePage = (props) => {
 
-    return <Wizard>
+    return <Wizzard>
         <StepOne />
         <StepTwo />
-    </Wizard>
+    </Wizzard>
 }
 export default HomePage

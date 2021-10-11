@@ -1,9 +1,9 @@
 import React from "react"
 
-const StepTWo = (props) => {
+const StepTwo = (props) => {
 
   return <div>
     Step TWo
   </div>
 }
-export default StepTWo
+export default StepTwo
