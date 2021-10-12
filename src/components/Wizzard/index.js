@@ -2,7 +2,8 @@ import React, { Fragment, useState } from 'react'
 import Navbar from '../Navbar'
 import styled from 'styled-components';
 import Divider from '../Divider';
-import { WizardContext } from '../../services/Context/WizardContext';
+import { WizzardContext } from '../../services/Context/WizzardContext';
+import { useForm } from 'react-hook-form'
 
 const Circle = styled.div`
 height: ${props => props.active ? '40px' : '30px'};
@@ -50,12 +51,20 @@ cursor: pointer;
 `
 
 const Wizzard = (props) => {
-
+  const { register, handleSubmit, getValues, formState: { errors }, control } = useForm({
+    mode: 'onSubmit'
+  })
   const [step, setStep] = useState(1)
   const [data, setData] = useState({})
 
-  return <WizardContext.Provider value={{ data, setData }}>
-    <WizzardWrapper>
+  function onSubmit(dataSubmited) {
+    console.log(dataSubmited)
+    setData({ ...data, ...dataSubmited })
+    setStep(step + 1)
+  }
+
+  return <WizzardContext.Provider value={{ data, register, getValues, errors, control }}>
+    <WizzardWrapper as='form' onSubmit={handleSubmit(onSubmit)}>
       <Navbar>
         <div style={{ margin: 'auto', display: 'flex', alignItems: 'center' }}>
           {props.children.map((_, index) => {
@@ -74,13 +83,11 @@ const Wizzard = (props) => {
       <div className="actions">
         <Divider />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-          <ActionButtons onClick={() => setStep(0)}>{'Close'}</ActionButtons>
-          <ActionButtons
-            disabled={step >= props.children.length - 1}
-            onClick={() => setStep(step + 1)}>{'Next'}</ActionButtons>
+          <ActionButtons onClick={() => console.log(data)} type='button'>{'Close'}</ActionButtons>
+          <ActionButtons type='submit'>{'Next'}</ActionButtons>
         </div>
       </div>
     </WizzardWrapper>
-  </WizardContext.Provider>
+  </WizzardContext.Provider>
 }
 export default Wizzard

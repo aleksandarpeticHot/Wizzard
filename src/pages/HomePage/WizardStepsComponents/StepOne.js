@@ -1,6 +1,19 @@
-import React from "react"
+import React, { useContext } from "react"
+import { WizzardContext } from "../../../services/Context/WizzardContext"
+import styled from "styled-components"
+
+const ErrorMessage = styled.p`
+color: red;
+margin-top: 0;
+`
+const errorStyle = {
+  border: '1px solid red',
+  width: 'fit-content'
+}
 
 const StepOne = (props) => {
+  const { register, data, getValues, errors } = useContext(WizzardContext)
+  const error = Object.keys(errors).length > 0 && errors.dataProtectionPolicy.message
 
   return <div>
     <h2>{props.header}</h2>
@@ -24,10 +37,16 @@ const StepOne = (props) => {
     <h3>{'What data you can save'}</h3>
     <p>{`For example, the number of your card, the PIN and PUK of your cell phone, the serial number of one of your devices or any information you need to keep in a safe place.
          your devices or any information that you need to keep in a safe place.`}</p>
-    <div>
-      <input type="checkbox" />
+    <div style={error ? errorStyle : null}>
+      <input
+        value={data.dataProtectionPolicy}
+        {...register("dataProtectionPolicy", {
+          validate: () => getValues('dataProtectionPolicy') ? true : 'Please check to continue.',
+        })}
+        type="checkbox" />
       <label>{'Check this if you are of legal age and if you agree for us to use the data according to the data protection policy.'}</label>
     </div>
+    {error && <ErrorMessage>{errors.dataProtectionPolicy.message}</ErrorMessage>}
   </div >
 }
 export default StepOne

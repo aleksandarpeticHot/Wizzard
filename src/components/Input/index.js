@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useController } from 'react-hook-form';
 import { FaRegEye } from 'react-icons/fa';
 
 const Input = (props) => {
+  const { field, fieldState } = useController(props)
   const { style, label, fluid, ...inputProps } = props
   const [visibleFieldPassword, setVisibleFieldPassword] = useState(false)
 
@@ -16,6 +18,7 @@ const Input = (props) => {
     <label style={{ marginBottom: 5, fontWeight: 700 }}>{props.label}</label>
     <div style={{ position: 'relative', width: fluid ? '100%' : 275, ...props.style }}>
       <input
+        {...field}
         type={getTypeInput()}
         style={{ width: 'calc(100% - 12px)', height: 35, border: '2px solid #D7DDE0', borderRadius: '4px', padding: '2px 5px' }}
         {...inputProps}
@@ -28,6 +31,7 @@ const Input = (props) => {
       />
       }
     </div>
+    {fieldState.error && <span style={{ color: 'red' }}>{fieldState.error.message}</span>}
   </div>
 }
 export default Input

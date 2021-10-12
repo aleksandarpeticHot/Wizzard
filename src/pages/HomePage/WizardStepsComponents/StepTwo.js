@@ -1,12 +1,15 @@
-import React from "react"
+import React, { useContext } from "react"
 import Input from "../../../components/Input"
 import styled from "styled-components"
+import { WizzardContext } from "../../../services/Context/WizzardContext"
 
 const Field = styled.div`
 margin: 35px 10px;
 `
+const MINIMUN_LENGTH_PASSWORD = 8
 
 const StepTwo = (props) => {
+  const { register, data, getValues, errors, control } = useContext(WizzardContext)
 
   return <div>
     <Field>
@@ -20,12 +23,26 @@ const StepTwo = (props) => {
     <Field>
       <div style={{ display: 'flex' }}>
         <Input
+          control={control}
+          rules={{
+            required: {
+              value: true,
+              message: 'Please enter password.'
+            },
+            minLength: {
+              value: MINIMUN_LENGTH_PASSWORD,
+              message: 'Password must have at least 8 characters.'
+            }
+          }}
+          name={'password'}
           type={'password'}
           placeholder={'Create Master Password'}
           label={'Create your Master Password'}
           style={{ marginRight: 50 }}
         />
         <Input
+          control={control}
+          name={'passwordRepeat'}
           type={'password'}
           placeholder={'Repeat Master Password'}
           label={'Repeat password'}
@@ -39,6 +56,8 @@ const StepTwo = (props) => {
       <div>
         <Input
           fluid
+          control={control}
+          name={'passwordHint'}
           placeholder={'Enter your hint'}
           label={'Create your hint to remember your password (optional)'}
         />
