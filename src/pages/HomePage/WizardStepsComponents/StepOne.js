@@ -3,7 +3,7 @@ import React from "react"
 const StepOne = (props) => {
 
   return <div>
-    <h2>{'Create your password Manager'}</h2>
+    <h2>{props.header}</h2>
     <div className="content">
       <div style={{ display: 'flex', alignItems: 'baseline', margin: '0px 50px', justifyContent: 'space-evenly' }}>
         <div style={{ width: '30%' }}>

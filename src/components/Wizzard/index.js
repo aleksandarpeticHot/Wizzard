@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import Navbar from '../Navbar'
 import styled from 'styled-components';
 import Divider from '../Divider';
+import { WizardContext } from '../../services/Context/WizardContext';
 
 const Circle = styled.div`
 height: ${props => props.active ? '40px' : '30px'};
@@ -50,33 +51,36 @@ cursor: pointer;
 
 const Wizzard = (props) => {
 
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(1)
+  const [data, setData] = useState({})
 
-  return <WizzardWrapper>
-    <Navbar>
-      <div style={{ margin: 'auto', display: 'flex', alignItems: 'center' }}>
-        {props.children.map((_, index) => {
-          return <Fragment key={index}>
-            <Circle active={step === index}>
-              <p>{index + 1}</p>
-            </Circle>
-            {index + 1 < props.children.length && <ConnectCircleLine />}
-          </Fragment>
-        })}
+  return <WizardContext.Provider value={{ data, setData }}>
+    <WizzardWrapper>
+      <Navbar>
+        <div style={{ margin: 'auto', display: 'flex', alignItems: 'center' }}>
+          {props.children.map((_, index) => {
+            return <Fragment key={index}>
+              <Circle active={step === index}>
+                <p>{index + 1}</p>
+              </Circle>
+              {index + 1 < props.children.length && <ConnectCircleLine />}
+            </Fragment>
+          })}
+        </div>
+      </Navbar>
+      <div className="content">
+        {props.children[step]}
       </div>
-    </Navbar>
-    <div className="content">
-      {props.children[step]}
-    </div>
-    <div className="actions">
-      <Divider />
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-        <ActionButtons onClick={() => setStep(0)}>{'Close'}</ActionButtons>
-        <ActionButtons
-          disabled={step >= props.children.length - 1}
-          onClick={() => setStep(step + 1)}>{'Next'}</ActionButtons>
+      <div className="actions">
+        <Divider />
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
+          <ActionButtons onClick={() => setStep(0)}>{'Close'}</ActionButtons>
+          <ActionButtons
+            disabled={step >= props.children.length - 1}
+            onClick={() => setStep(step + 1)}>{'Next'}</ActionButtons>
+        </div>
       </div>
-    </div>
-  </WizzardWrapper>
+    </WizzardWrapper>
+  </WizardContext.Provider>
 }
 export default Wizzard

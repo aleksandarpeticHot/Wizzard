@@ -6,8 +6,8 @@ import StepTwo from './WizardStepsComponents/StepTwo'
 const HomePage = (props) => {
 
     return <Wizzard>
-        <StepOne />
-        <StepTwo />
+        <StepOne header={'Create your Password Manager'} />
+        <StepTwo header={'Create your Password Manager'} />
     </Wizzard>
 }
 export default HomePage
