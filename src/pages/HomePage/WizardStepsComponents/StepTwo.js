@@ -7,9 +7,34 @@ const Field = styled.div`
 margin: 35px 10px;
 `
 const MINIMUN_LENGTH_PASSWORD = 8
+const MAX_LENTH_PASSWORD = 24
+const regexAtLeastOneDigitAtLeastOneUppercase = /^(?=.*[A-Z])(?=.*\d)/
+const MAX_LENTH_HINT = 255
 
 const StepTwo = (props) => {
-  const { register, data, getValues, errors, control } = useContext(WizzardContext)
+  const { getValues, control, watch } = useContext(WizzardContext)
+  const passwordHint = watch('passwordHint')
+
+  function getPasswordRules() {
+    return {
+      required: {
+        value: true,
+        message: 'Please enter password.'
+      },
+      minLength: {
+        value: MINIMUN_LENGTH_PASSWORD,
+        message: 'Password must have at least 8 characters.'
+      },
+      maxLength: {
+        value: MAX_LENTH_PASSWORD,
+        message: 'Password has more than 24 characters.'
+      },
+      pattern: {
+        value: regexAtLeastOneDigitAtLeastOneUppercase,
+        message: 'Password must have at least one digit and at least one uppercase.'
+      }
+    }
+  }
 
   return <div>
     <Field>
@@ -21,28 +46,29 @@ const StepTwo = (props) => {
       </p>
     </Field>
     <Field>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end' }}>
         <Input
           control={control}
-          rules={{
-            required: {
-              value: true,
-              message: 'Please enter password.'
-            },
-            minLength: {
-              value: MINIMUN_LENGTH_PASSWORD,
-              message: 'Password must have at least 8 characters.'
-            }
-          }}
+          rules={getPasswordRules()}
           name={'password'}
           type={'password'}
           placeholder={'Create Master Password'}
-          label={'Create your Master Password'}
-          style={{ marginRight: 50 }}
+          label={<div>
+            <p style={{ marginBottom: 0 }}>{'Create Master Password'}</p>
+            <small style={{ fontWeight: 100 }}>{'Password(Min 8 - Max 24 characters)(At least 1 number and an uppercase letter)'}</small>
+          </div>}
+          style={{ marginRight: 100 }}
         />
         <Input
           control={control}
           name={'passwordRepeat'}
+          rules={{
+            required: {
+              value: true,
+              message: 'Please repeat your password.'
+            },
+            validate: (value) => getValues('password') === value || 'Password does not match.'
+          }}
           type={'password'}
           placeholder={'Repeat Master Password'}
           label={'Repeat password'}
@@ -57,11 +83,17 @@ const StepTwo = (props) => {
         <Input
           fluid
           control={control}
+          rules={{
+            maxLength: {
+              value: MAX_LENTH_HINT,
+              message: 'Hint has more than 255 characters.'
+            }
+          }}
           name={'passwordHint'}
           placeholder={'Enter your hint'}
           label={'Create your hint to remember your password (optional)'}
         />
-        <span style={{ float: 'right', opacity: '0.4' }}>{'0/60'}</span>
+        <span style={{ float: 'right', opacity: '0.4' }}>{`${passwordHint ? passwordHint.length : 0}/255`}</span>
       </div>
     </Field>
   </div>

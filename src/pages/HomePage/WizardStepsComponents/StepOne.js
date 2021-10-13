@@ -11,6 +11,19 @@ const errorStyle = {
   width: 'fit-content'
 }
 
+const ImageWrapper = styled.div`
+display: flex; 
+align-items: baseline; 
+margin: 0px 50px;
+justify-content: space-evenly;
+`
+const imageDescription1 = `Save here all your passwords, data or any information
+or any information, forget paper notes and unprotected
+notes and unprotected applications.`
+
+const imageDescription2 = `Create your master password: only you will be able to
+access your secrets with it.`
+
 const StepOne = (props) => {
   const { register, data, getValues, errors } = useContext(WizzardContext)
   const error = Object.keys(errors).length > 0 && errors.dataProtectionPolicy.message
@@ -18,19 +31,16 @@ const StepOne = (props) => {
   return <div>
     <h2>{props.header}</h2>
     <div className="content">
-      <div style={{ display: 'flex', alignItems: 'baseline', margin: '0px 50px', justifyContent: 'space-evenly' }}>
+      <ImageWrapper>
         <div style={{ width: '30%' }}>
           <img alt={''} src={`${process.env.PUBLIC_URL}/images/Screenshot_1.png`} />
-          <p>{`Save here all your passwords, data or any information
-            or any information, forget paper notes and unprotected
-            notes and unprotected applications.`}</p>
+          <p>{imageDescription1}</p>
         </div>
         <div style={{ width: '30%' }}>
           <img alt={''} src={`${process.env.PUBLIC_URL}/images/Screenshot_2.png`} />
-          <p>{`Create your master password: only you will be able to
-             access your secrets with it.`}</p>
+          <p>{imageDescription2}</p>
         </div>
-      </div>
+      </ImageWrapper>
     </div>
     <h3>{'How it works'}</h3>
     <p>{'First of all, you must create a different password for your electronic belongings. You will not be able to recover your password, so remember it well.'}</p>
