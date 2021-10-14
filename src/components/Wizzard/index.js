@@ -15,7 +15,8 @@ const Wizzard = (props) => {
     watch,
     reset
   } = useForm({
-    mode: 'onSubmit'
+    mode: 'onSubmit',
+    defaultValues: props.defaultValues
   })
   const [step, setStep] = useState(0)
   const [data, setData] = useState({})

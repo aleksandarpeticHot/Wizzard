@@ -18,6 +18,7 @@ const Input = (props) => {
     <label>{props.label}</label>
     <InputContainer fluidwidth={fluid}>
       <input
+        value={field.value || ''}
         autoComplete={'off'}
         {...inputProps}
         {...field}
