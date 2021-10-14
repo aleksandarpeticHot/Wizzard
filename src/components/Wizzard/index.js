@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react'
 import Navbar from '../Navbar'
-import Divider from '../Divider'
 import { WizzardContext } from '../../services/Context/WizzardContext'
 import { useForm } from 'react-hook-form'
-import { Circle, ConnectCircleLine, WizzardWrapper, ActionButtons } from './style'
+import { Circle, ConnectCircleLine, WizzardWrapper } from './style'
+import Loader from '../Loader'
 
 const Wizzard = (props) => {
   const {
@@ -19,9 +19,23 @@ const Wizzard = (props) => {
   })
   const [step, setStep] = useState(0)
   const [data, setData] = useState({})
+  const [isBusy, setIsBusy] = useState(false)
 
-  function onSubmit(dataSubmited) {
-    setData({ ...data, ...dataSubmited })
+  async function onSubmit(dataSubmited) {
+    if (props.children[step].props.handleNextAction) {
+      try {
+        setIsBusy(true)
+        const response = await props.children[step].props.handleNextAction()
+        dataSubmited.succes = response.succes
+        setData({ ...data, ...dataSubmited })
+      } catch (error) {
+        //catch errors
+      }
+      setIsBusy(false)
+    }
+    else {
+      setData({ ...data, ...dataSubmited })
+    }
     setStep(step + 1)
   }
 
@@ -31,29 +45,27 @@ const Wizzard = (props) => {
     setStep(0)
   }
 
-  return <WizzardContext.Provider value={{ data, register, getValues, errors, control, watch }}>
-    <WizzardWrapper as='form' onSubmit={handleSubmit(onSubmit)}>
-      <Navbar>
-        <div style={{ margin: 'auto', display: 'flex', alignItems: 'center' }}>
-          {props.children.map((_, index) => {
-            return <Fragment key={index}>
-              <Circle active={step === index}>
-                <p>{index + 1}</p>
-              </Circle>
-              {index + 1 < props.children.length && <ConnectCircleLine />}
-            </Fragment>
-          })}
-        </div>
-      </Navbar>
-      <div className="content">
-        {props.children[step]}
+  function getNavbar() {
+    return <Navbar>
+      <div style={{ margin: 'auto', display: 'flex', alignItems: 'center' }}>
+        {props.children.map((_, index) => {
+          return <Fragment key={index}>
+            <Circle active={step === index}>
+              <p>{index + 1}</p>
+            </Circle>
+            {index + 1 < props.children.length && <ConnectCircleLine />}
+          </Fragment>
+        })}
       </div>
-      <div className="actions">
-        <Divider />
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-          <ActionButtons onClick={() => handleClose()} type='button'>{'Close'}</ActionButtons>
-          <ActionButtons type='submit'>{'Next'}</ActionButtons>
-        </div>
+    </Navbar>
+  }
+
+  return <WizzardContext.Provider value={{ data, register, getValues, errors, control, watch, setStep, handleClose }}>
+    <WizzardWrapper as='form' onSubmit={handleSubmit(onSubmit)}>
+      {getNavbar()}
+      <div className="content">
+        <Loader isBusy={isBusy} />
+        {props.children[step]}
       </div>
     </WizzardWrapper>
   </WizzardContext.Provider>

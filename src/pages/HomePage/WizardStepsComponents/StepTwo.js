@@ -2,9 +2,18 @@ import React, { useContext } from "react"
 import Input from "../../../components/Input"
 import styled from "styled-components"
 import { WizzardContext } from "../../../services/Context/WizzardContext"
+import { ActionButtons } from "../../../components/Wizzard/style"
+import Divider from "../../../components/Divider"
 
 const Field = styled.div`
 margin: 35px 10px;
+`
+const ActionWrapper = styled.div`
+height: 75px;
+bottom: 0;
+margin: 15px 0px;
+position: absolute;
+width: calc(100% - 75px);
 `
 const MINIMUN_LENGTH_PASSWORD = 8
 const MAX_LENTH_PASSWORD = 24
@@ -12,7 +21,7 @@ const regexAtLeastOneDigitAtLeastOneUppercase = /^(?=.*[A-Z])(?=.*\d)/
 const MAX_LENTH_HINT = 255
 
 const StepTwo = (props) => {
-  const { getValues, control, watch } = useContext(WizzardContext)
+  const { getValues, control, watch, handleClose } = useContext(WizzardContext)
   const passwordHint = watch('passwordHint')
 
   function getPasswordRules() {
@@ -96,6 +105,13 @@ const StepTwo = (props) => {
         <span style={{ float: 'right', opacity: '0.4' }}>{`${passwordHint ? passwordHint.length : 0}/255`}</span>
       </div>
     </Field>
+    <ActionWrapper>
+      <Divider />
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
+        <ActionButtons onClick={() => handleClose()} type='button'>{'Close'}</ActionButtons>
+        <ActionButtons type='submit'>{'Next'}</ActionButtons>
+      </div>
+    </ActionWrapper>
   </div>
 }
 export default StepTwo

@@ -1,6 +1,8 @@
 import React, { useContext } from "react"
 import { WizzardContext } from "../../../services/Context/WizzardContext"
 import styled from "styled-components"
+import { ActionButtons } from "../../../components/Wizzard/style"
+import Divider from "../../../components/Divider"
 
 const ErrorMessage = styled.p`
 color: red;
@@ -10,6 +12,14 @@ const errorStyle = {
   border: '1px solid red',
   width: 'fit-content'
 }
+
+const ActionWrapper = styled.div`
+height: 75px;
+bottom: 0;
+margin: 15px 0px;
+position: absolute;
+width: calc(100% - 75px);
+`
 
 const ImageWrapper = styled.div`
 display: flex; 
@@ -25,7 +35,7 @@ const imageDescription2 = `Create your master password: only you will be able to
 access your secrets with it.`
 
 const StepOne = (props) => {
-  const { register, data, getValues, errors } = useContext(WizzardContext)
+  const { register, data, getValues, errors, handleClose } = useContext(WizzardContext)
   const error = Object.keys(errors).length > 0 && errors.dataProtectionPolicy.message
 
   return <div>
@@ -57,6 +67,13 @@ const StepOne = (props) => {
       <label>{'Check this if you are of legal age and if you agree for us to use the data according to the data protection policy.'}</label>
     </div>
     {error && <ErrorMessage>{errors.dataProtectionPolicy.message}</ErrorMessage>}
+    <ActionWrapper>
+      <Divider />
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
+        <ActionButtons onClick={() => handleClose()} type='button'>{'Close'}</ActionButtons>
+        <ActionButtons type='submit'>{'Next'}</ActionButtons>
+      </div>
+    </ActionWrapper>
   </div >
 }
 export default StepOne

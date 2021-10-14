@@ -28,7 +28,7 @@ export const WizzardWrapper = styled.div`
   bottom: 0;
   margin: 15px;
   position: absolute;
-  width: calc(100% - 30px)
+  width: calc(100% - 30px);
 }
 `
 export const ActionButtons = styled.button`
@@ -36,11 +36,9 @@ width: 75px;
 height: 35px;
 border: 0;
 background: white;
-&:hover {
-  background: #062A45;
-  color: white;
-  border-radius: 3px;
-}
+background: #062A45;
+color: white;
+border-radius: 3px;
 margin: 0px 15px;
 cursor: pointer;
 `
